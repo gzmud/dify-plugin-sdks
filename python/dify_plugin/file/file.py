@@ -3,7 +3,7 @@ from pydantic import BaseModel
 
 from dify_plugin.file.constants import DIFY_FILE_IDENTITY
 from dify_plugin.file.entities import FileType
-
+from urllib.parse import urljoin
 
 class File(BaseModel):
     dify_model_identity: str = DIFY_FILE_IDENTITY
@@ -15,6 +15,7 @@ class File(BaseModel):
     type: FileType
 
     _blob: bytes | None = None
+    base_url: str | None = None
 
     @property
     def blob(self) -> bytes:
@@ -23,8 +24,9 @@ class File(BaseModel):
 
         If the file content is not loaded yet, it will be loaded from the URL and stored in the `_blob` attribute.
         """
+        effective_url = urljoin(self.base_url, self.url) if self.base_url is not None else self.url
         if self._blob is None:
-            response = httpx.get(self.url)
+            response = httpx.get(effective_url)
             response.raise_for_status()
             self._blob = response.content
 

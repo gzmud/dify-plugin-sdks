@@ -167,7 +167,7 @@ class ToolLike(ABC, Generic[T]):
         return "_get_runtime_parameters" in cls.__dict__
 
     @classmethod
-    def _convert_parameters(cls, tool_parameters: dict) -> dict:
+    def _convert_parameters(cls, tool_parameters: dict, session: Optional[Session] = None) -> dict:
         """
         convert parameters into correct types
         """
@@ -180,6 +180,7 @@ class ToolLike(ABC, Generic[T]):
                     filename=value.get("filename"),
                     extension=value.get("extension"),
                     size=value.get("size"),
+                    base_url=session.files_base_url,
                 )
             elif isinstance(value, list) and all(
                 isinstance(item, dict) and item.get("dify_model_identity") == DIFY_FILE_IDENTITY for item in value
@@ -192,6 +193,7 @@ class ToolLike(ABC, Generic[T]):
                         filename=item.get("filename"),
                         extension=item.get("extension"),
                         size=item.get("size"),
+                        base_url=session.files_base_url,
                     )
                     for item in value
                 ]
@@ -253,7 +255,7 @@ class Tool(ToolLike[ToolInvokeMessage]):
 
     def invoke(self, tool_parameters: dict) -> Generator[ToolInvokeMessage, None, None]:
         # convert parameters into correct types
-        tool_parameters = self._convert_parameters(tool_parameters)
+        tool_parameters = self._convert_parameters(tool_parameters,session=self.session)
         return self._invoke(tool_parameters)
 
     def get_runtime_parameters(self) -> list[ToolParameter]:

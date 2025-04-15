@@ -21,6 +21,8 @@ from dify_plugin.core.server.__base.request_reader import RequestReader
 from dify_plugin.core.server.__base.response_writer import ResponseWriter
 from dify_plugin.core.server.tcp.request_reader import TCPReaderWriter
 
+from dify_plugin.config.config import DifyPluginEnv
+
 #################################################
 # Session
 #################################################
@@ -81,6 +83,8 @@ class Session:
         message_id: Optional[str] = None,
         app_id: Optional[str] = None,
         endpoint_id: Optional[str] = None,
+        config:Optional[DifyPluginEnv] = None,
+        files_base_url: Optional[str] = None,
     ) -> None:
         # current session id
         self.session_id: str = session_id
@@ -109,6 +113,12 @@ class Session:
 
         # dify plugin daemon url
         self.dify_plugin_daemon_url: Optional[str] = dify_plugin_daemon_url
+
+        # config
+        self.config: Optional[DifyPluginEnv] = config
+
+        # files base url
+        self.files_base_url: Optional[str] = files_base_url
 
         # register invocations
         self._register_invocations()

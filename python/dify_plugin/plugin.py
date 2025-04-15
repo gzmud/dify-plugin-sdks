@@ -315,6 +315,13 @@ class Plugin(IOServer, Router):
         :param data: request data
         """
 
+        if self.config.INSTALL_METHOD == InstallMethod.Local:
+            files_base_url = self.config.DIFY_FILE_BASE_URL
+        if self.config.INSTALL_METHOD == InstallMethod.Remote:
+            files_base_url = self.config.DIFY_FILE_BASE_URL
+        if self.config.INSTALL_METHOD == InstallMethod.Serverless:
+            files_base_url = self.config.DIFY_FILE_BASE_URL
+
         session = Session(
             session_id=session_id,
             executor=self.executer,
@@ -326,6 +333,8 @@ class Plugin(IOServer, Router):
             message_id=message_id,
             app_id=app_id,
             endpoint_id=endpoint_id,
+            config=self.config,
+            files_base_url=files_base_url,
         )
         response = self.dispatch(session, data)
         if response:
