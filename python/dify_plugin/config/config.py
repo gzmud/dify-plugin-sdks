@@ -36,7 +36,7 @@ class DifyPluginEnv(BaseSettings):
     SERVERLESS_THREADS: int = Field(default=5, description="Serverless threads")
 
     DIFY_PLUGIN_DAEMON_URL: str = Field(default="http://localhost:5002", description="backwards invocation address")
-    DIFY_FILE_BASE_URL: str = Field(default=os.environ("DIFY_FILE_BASE_URL","http://api:5001"), description="inner api address")
+    DIFY_FILE_BASE_URL: str = Field(default=os.environ.get("DIFY_FILE_BASE_URL","http://api:5001"), description="inner api address")
 
     model_config = SettingsConfigDict(
         # read from dotenv format config file
