@@ -15,3 +15,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Updated tool parameter conversion to support files_base_url
 - Updated plugin initialization to set files_base_url
+
+### Fixed
+- Fixed missing import os in config.py
